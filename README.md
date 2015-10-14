@@ -9,6 +9,9 @@ Sample client for DocPlanner API
 - Http Server like nginx or Apache
 - PHP
 
+#### Note:
+This is not a production ready application, this application might require many improvements. It's just an application to show you how you can integrate with DocPlanner API.
+
 ### NGINX configuration
 	server {
 	    listen 5000;
