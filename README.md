@@ -1,6 +1,10 @@
 # Sample DP API Client
 Sample client for DocPlanner API
 
+- Clone the project into a directory
+- `cd` into project directory 
+- run `php composer install`
+
 ### NGINX configuration
 	server {
 	    listen 5000;
