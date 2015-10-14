@@ -5,6 +5,10 @@ Sample client for DocPlanner API
 - `cd` into project directory 
 - run `php composer install`
 
+### Requirements
+- Http Server like nginx or Apache
+- PHP
+
 ### NGINX configuration
 	server {
 	    listen 5000;
