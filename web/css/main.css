@@ -1,0 +1,76 @@
+.tac {
+	text-align: center;
+}
+
+.tal {
+	text-align: center;
+}
+
+.nav {
+	margin-bottom: 10px;
+}
+
+.loading-modal {
+	z-index: 99999999;
+	margin-top: 10%
+}
+.loading-modal .progress-bar{
+	width: 100%;
+}
+.loading-modal .progress
+{
+	margin-bottom:0;
+}
+.carousel-control, .carousel-control.left, .carousel-control.right
+{
+	background:none;
+	opacity: 1;
+	width:30px;
+}
+.carousel-control.left{
+	left:-40px;
+}
+.carousel-control.right
+{
+	right:-40px;
+}
+.carousel-indicators
+{
+	bottom:-40px;
+}
+.calendar-item{
+	height: 500px;
+	overflow-y:auto;
+}
+
+.carousel-inner .table {
+	margin: 0;
+	table-layout: fixed;
+	width:882px;
+}
+
+.carousel-inner td,  .carousel-inner th
+{
+	width:126px;
+}
+#calendar-carousel .list-group-item
+{
+	text-align: center;
+	padding:8px;
+}
+.booking-list
+{
+	height: 400px;
+	overflow: auto;
+}
+
+.input-group-addon + select.form-control {
+	-webkit-appearance: none;
+	background: url('/img/arrow-down.svg') no-repeat right;
+	background-size: 24px;
+}
+
+#form-put-slots .modal-body {
+	height: 450px;
+	overflow: auto;
+}

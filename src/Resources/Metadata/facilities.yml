@@ -1,0 +1,5 @@
+DP\Model\Facility:
+    exclusion_policy: ALL
+    exclude: true
+    read_only: false
+

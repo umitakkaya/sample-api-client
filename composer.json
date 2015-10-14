@@ -1,0 +1,21 @@
+{
+    "name": "umitakkaya/dp-api-client",
+    "description": "Sample client for DocPlanner API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Umit AKKAYA",
+            "email": "umit.akkaya@docplanner.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "slim/slim": "~2.6",
+        "clickcoder/slim-blade": "dev-master",
+        "jms/serializer": "~1.0",
+        "guzzle/guzzle": "~3.9"
+    },
+    "autoload" : {
+        "psr-4" : { "DP\\": "src/DP", "App\\": "src/App"}
+    }
+}
