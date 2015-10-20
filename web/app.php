@@ -14,7 +14,7 @@ $init = new Initialize;
 
 $app        = $init->getApp();
 $serializer = $init->getSerializer();
-$dp         = new DPClient($serializer, 'tr');
+$dp         = new DPClient($serializer);
 
 
 $app->get('/', function () use ($app, $dp)
