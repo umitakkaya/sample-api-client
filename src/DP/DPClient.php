@@ -72,9 +72,12 @@ class DPClient
 	 */
 	public function __construct($serializer, $locale = "pl")
 	{
-		$this->serializer = $serializer;
-		$this->client     = new Client(self::$PREFIXES[$locale], ['request.options' => ['headers' => ['Content-Type' => 'application/json']]]);
+		$requestOptions   = [
+			'headers' => ['Content-Type' => 'application/json'],
+		];
 
+		$this->serializer = $serializer;
+		$this->client     = new Client(self::$PREFIXES[$locale], ['request.options' => $requestOptions]);
 	}
 
 	/**
@@ -157,7 +160,7 @@ class DPClient
 
 	public function isAuthorized()
 	{
-		if($this->getTokenExpirationDate() === null)
+		if ($this->getTokenExpirationDate() === null)
 		{
 			return $this->token !== null;
 		}

@@ -9,7 +9,7 @@
                     <h4 class="modal-title">Book a visit to {{ $doctor->getName() }} {{ $doctor->getSurname() }}
                         at {{ $visitStart->format('Y-m-d H:i:s') }}</h4>
                 </div>
-                <div class="form-content">
+                <div class="booking-form form-content">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="ddl-doctor-service" class="control-label">Service:</label>
@@ -23,20 +23,8 @@
                         </div>
                         @if($extraFields->isNin())
                             <div class="form-group">
-                                <label for="txt-nin" class="control-label">Minimum price:</label>
+                                <label for="txt-nin" class="control-label">National Identity Number:</label>
                                 <input type="text" class="form-control" id="txt-nin" name="nin" required>
-                            </div>
-                        @endif
-                        @if($extraFields->isGender())
-                            <div class="form-group">
-                                <label>
-                                    <input type="radio" class="form-control" name="gender" value="m" required>
-                                    Male
-                                </label>
-                                <label for="">
-                                    <input type="radio" class="form-control" name="gender" value="f" required>
-                                    Female
-                                </label>
                             </div>
                         @endif
                         @if($extraFields->isBirthDate())
@@ -67,13 +55,25 @@
                             <input type="email" min="0" class="form-control" id="txt-email"
                                    name="email">
                         </div>
+                        @if($extraFields->isGender())
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="gender" value="m" required>
+                                    Male
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="gender" value="f" required>
+                                    Female
+                                </label>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label class="radio-inline">
-                                <input type="radio" class="form-control" name="patient-type" value="1" required>
+                                <input type="radio" name="patient-type" value="1" required>
                                 Returning patient
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" class="form-control" name="patient-type" value="0" required>
+                                <input type="radio" name="patient-type" value="0" required>
                                 New patient
                             </label>
                         </div>
