@@ -433,7 +433,7 @@ class DPClient
 	 */
 	public function bookSlot($facilityId, $doctorId, $addressId, $start, $bookVisitRequest)
 	{
-		$requestBody = $this->serializer->serialize($bookVisitRequest, 'json');
+		$requestBody = $this->serializer->serialize($bookVisitRequest, 'json', SerializationContext::create()->setGroups(['Default', 'post_book']));
 
 		$request =
 			$this->client->post([

@@ -10,6 +10,8 @@ namespace DP\Model;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\Groups;
 
 class Patient
 {
@@ -44,8 +46,9 @@ class Patient
 	private $email;
 
 	/**
-	 * @Type("DateTime<'Y-m-d'>")
+	 * @Type("DateTime<'Y-m-d\TH:i:sP'>")
 	 * @SerializedName("birth_date")
+	 * @Groups({"get"})
 	 */
 	private $birthDate;
 
@@ -74,6 +77,19 @@ class Patient
 	 * @return \DateTime
 	 */
 	public function getBirthDate()
+	{
+		return $this->birthDate;
+	}
+
+	/**
+	 * @Type("DateTime<'Y-m-d'>")
+	 * @VirtualProperty
+	 * @SerializedName("birth_date")
+	 * @Groups({"post_book"})
+	 *
+	 * @return \DateTime
+	 */
+	public function getFormattedBirthDate()
 	{
 		return $this->birthDate;
 	}

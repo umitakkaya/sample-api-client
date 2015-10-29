@@ -40,13 +40,14 @@
 
         <div class="well well-lg">
 
-            <form class="form-horizontal">
+            <form id="authorization" class="form-horizontal" action="/authorization" method="POST">
                 <div class="form-group">
                     <label for="clientId" class="col-sm-2 control-label">ClientID:</label>
 
                     <div class="col-sm-10">
                         <input class="form-control" type="text" name="client-id" id="clientId"
-                               placeholder="Public ID"/>
+                               placeholder="Public ID"
+                               autocomplete="on" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -54,13 +55,24 @@
 
                     <div class="col-sm-10">
                         <input class="form-control" type="password" name="client-secret" id="clientSecret"
-                               placeholder="Client secret"/>
+                               placeholder="Client secret"
+                               autocomplete="on" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ddl-locale" class="col-sm-2 control-label">Locale:</label>
+
+                    <div class="col-sm-10">
+                        <select class="form-control" name="locale" id="ddl-locale" required>
+                            <option value="">Select locale</option>
+                            <option value="pl">ZnanyLekarz (PL)</option>
+                            <option value="tr">Eniyihekim (TR)</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-10 pull-right">
-                        <button id="btnAuthorize" type="button" class="btn btn-primary" formaction="/authorization"
-                                formmethod="POST">
+                        <button class="btn btn-primary">
                             Authorize
                         </button>
                     </div>
@@ -376,22 +388,24 @@
         });
 
 
-        $('#btnAuthorize').on('click', function () {
+        $('#authorization').on('submit', function (e) {
 
-            var $this = $(this);
-            var url = $this.attr('formaction');
-            var $form = $this.parents('form').first();
-            var $well = $form.parent();
-            var $token = $('#token');
-            var data = {
-                'client-id': $('#clientId').val(),
-                'client-secret': $('#clientSecret').val()
-            };
+            e.preventDefault();
 
-            $this.prop('disabled', true);
+            var $this   = $(this);
+            var url     = $this.attr('action');
+            var method  = $this.attr('method');
+            var $well   = $this.parent();
+            var $button = $this.find('button');
+            var $token  = $('#token');
 
-            $.post(url, data, 'json')
-                .done(function (data, status, jqXHR) {
+            $button.prop('disabled', true);
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: $this.serialize()
+            }).done(function (data, status, jqXHR) {
 
                     if (data.status === true) {
                         $well.siblings('.alert-success, .alert-info').removeClass('hidden');
@@ -406,7 +420,7 @@
                     }
                 })
                 .always(function () {
-                    $this.prop('disabled', false);
+                    $button.prop('disabled', false);
                 });
         });
 

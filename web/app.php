@@ -14,13 +14,16 @@ $init = new Initialize;
 
 $app        = $init->getApp();
 $serializer = $init->getSerializer();
-$dp         = new DPClient($serializer);
+
+$locale = $app->getCookie('locale') ?: null;
+$token  = $app->getCookie('token')  ?: null;
+$dp     = (new DPClient($serializer))->setToken($token);
 
 
 $app->get('/', function () use ($app, $dp)
 {
 	$app->render('index', [
-		'token' => $app->session->get('token')
+		'token' => $app->getCookie('token')
 	]);
 });
 
@@ -28,15 +31,15 @@ $app->post('/authorization', function () use ($app, $dp)
 {
 	$clientId     = $app->request()->post('client-id');
 	$clientSecret = $app->request()->post('client-secret');
+	$locale       = $app->request()->post('locale');
 
 	$dp->setClientId($clientId)->setClientSecret($clientSecret);
 	$token = $dp->authorize();
 
-
-	$app->session->clear();
-	$app->session->set('clientId', $clientId);
-	$app->session->set('clientSecret', $clientSecret);
-	$app->session->set('token', $token);
+	$app->setCookie('locale', $locale);
+	$app->setCookie('token', $token);
+	$app->setEncryptedCookie('clientId', $clientId);
+	$app->setEncryptedCookie('clientSecret', $clientSecret);
 
 	$app->response()->header('Content-Type', 'application/json');
 	$app->response()->body(json_encode([
@@ -48,7 +51,6 @@ $app->post('/authorization', function () use ($app, $dp)
 
 $app->get('/forms/add-doctor-service', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
 
 	$facilityId = $app->request()->get('facility-id');
 	$doctorId   = $app->request()->get('doctor-id');
@@ -68,7 +70,7 @@ $app->get('/forms/add-doctor-service', function () use ($app, $dp)
 
 $app->get('/forms/modify-doctor-service', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
+
 
 	$facilityId      = $app->request()->get('facility-id');
 	$doctorId        = $app->request()->get('doctor-id');
@@ -84,8 +86,6 @@ $app->get('/forms/modify-doctor-service', function () use ($app, $dp)
 
 $app->get('/forms/calendar', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$facilityId = $app->request()->get('facility-id');
 	$doctorId   = $app->request()->get('doctor-id');
 
@@ -106,8 +106,6 @@ $app->get('/forms/calendar', function () use ($app, $dp)
 
 $app->get('/forms/book-visit', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$facilityId = $app->request()->get('facility-id');
 	$doctorId   = $app->request()->get('doctor-id');
 	$addressId  = $app->request()->get('address-id');
@@ -134,7 +132,6 @@ $app->get('/forms/book-visit', function () use ($app, $dp)
 
 $app->get('/forms/put-slots', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
 
 	$facilityId = $app->request()->get('facility-id');
 	$doctorId   = $app->request()->get('doctor-id');
@@ -160,7 +157,6 @@ $app->get('/forms/put-slots', function () use ($app, $dp)
 
 $app->get('/inputs/slot', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
 
 	$index      = $app->request()->get('index') ?: 0;
 	$facilityId = $app->request()->get('facility-id');
@@ -181,8 +177,6 @@ $app->get('/inputs/slot', function () use ($app, $dp)
 
 $app->get('/inputs/slot-doctor-service', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$slotIndex          = $app->request()->get('slot-index') ?: 0;
 	$doctorServiceIndex = $app->request()->get('doctor-service-index') ?: 0;
 
@@ -204,8 +198,6 @@ $app->get('/inputs/slot-doctor-service', function () use ($app, $dp)
 
 $app->get('/services', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$services = $dp->getServices();
 
 	$app->check($services);
@@ -217,8 +209,6 @@ $app->get('/services', function () use ($app, $dp)
 
 $app->get('/notifications', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$notification = $dp->getNotification();
 
 	$app->render('partials.notification', [
@@ -229,8 +219,6 @@ $app->get('/notifications', function () use ($app, $dp)
 
 $app->get('/facilities', function () use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$facilities = $dp->getFacilities();
 
 	$app->check($facilities);
@@ -243,8 +231,6 @@ $app->get('/facilities', function () use ($app, $dp)
 
 $app->get('/facilities/:facilityId', function ($facilityId) use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$facility = $dp->getFacility($facilityId);
 
 	$app->check($facility);
@@ -256,8 +242,6 @@ $app->get('/facilities/:facilityId', function ($facilityId) use ($app, $dp)
 
 $app->get('/facilities/:facilityId/doctors', function ($facilityId) use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$doctors = $dp->getDoctors($facilityId);
 
 	$app->check($doctors);
@@ -271,8 +255,6 @@ $app->get('/facilities/:facilityId/doctors', function ($facilityId) use ($app, $
 
 $app->get('/facilities/:facilityId/doctors/:doctorId/addresses', function ($facilityId, $doctorId) use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$addresses = $dp->getAddresses($facilityId, $doctorId);
 
 	$app->check($addresses);
@@ -284,8 +266,6 @@ $app->get('/facilities/:facilityId/doctors/:doctorId/addresses', function ($faci
 
 $app->get('/facilities/:facilityId/doctors/:doctorId/slots', function ($facilityId, $doctorId) use ($app, $dp)
 {
-	$dp->setToken($app->session->get('token'));
-
 	$addressId = $app->request()->get('address-id');
 	$start     = new \DateTime($app->request()->get('start'));
 	$end       = new \DateTime($app->request()->get('end'));
@@ -335,9 +315,6 @@ $app->put(
 	'/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/slots',
 	function ($facilityId, $doctorId, $addressId) use ($app, $dp, $serializer)
 	{
-
-		$dp->setToken($app->session->get('token'));
-
 		$data = $app->request()->post();
 
 		/** @var PutSlotsRequest $putSlotsRequest */
@@ -349,7 +326,7 @@ $app->put(
 
 		$app->response()->header('Content-Type', 'application/json');
 		$app->response()->setBody(json_encode([
-			'status'     => true,
+			'status' => true,
 		]));
 	}
 );
@@ -358,8 +335,6 @@ $app->delete(
 	'/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/slots/:date',
 	function ($facilityId, $doctorId, $addressId, $date) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-
 		$date = new \DateTime($date);
 
 		$result = $dp->deleteSlots($facilityId, $doctorId, $addressId, $date);
@@ -375,9 +350,7 @@ $app->post(
 	'/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/slots/:start/book',
 	function ($facilityId, $doctorId, $addressId, $start) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-		$strBirthDate = $app->request()->post('birthdate');
-
+		$strBirthDate    = $app->request()->post('birthdate');
 		$nin             = $app->request()->post('nin');
 		$name            = $app->request()->post('name');
 		$surname         = $app->request()->post('surname');
@@ -424,7 +397,6 @@ $app->post(
 $app->get('/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/bookings',
 	function ($facilityId, $doctorId, $addressId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
 		$start = new \DateTime($app->request()->get('start'));
 		$end   = new \DateTime($app->request()->get('end') ?: '+12 weeks');
 
@@ -447,7 +419,6 @@ $app->get('/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/bookin
 $app->get('/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/booking-list',
 	function ($facilityId, $doctorId, $addressId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
 		$start = new \DateTime($app->request()->get('start'));
 		$end   = new \DateTime($app->request()->get('end') ?: '+12 weeks');
 
@@ -467,8 +438,6 @@ $app->get('/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/bookin
 $app->delete('/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/bookings/:bookingId',
 	function ($facilityId, $doctorId, $addressId, $bookingId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-
 		$result = $dp->cancelBooking($facilityId, $doctorId, $addressId, $bookingId);
 
 		$app->check($result);
@@ -481,8 +450,6 @@ $app->delete('/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/boo
 $app->get('/facilities/:facilityId/doctors/:doctorId/services',
 	function ($facilityId, $doctorId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-
 		$doctorServices = $dp->getDoctorServices($facilityId, $doctorId);
 
 		$app->check($doctorServices);
@@ -499,8 +466,6 @@ $app->post(
 	'/facilities/:facilityId/doctors/:doctorId/services',
 	function ($facilityId, $doctorId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-
 		$serviceId = $app->request()->post('service-id');
 		$priceMin  = $app->request()->post('minimum-price');
 		$priceMax  = $app->request()->post('maximum-price');
@@ -529,8 +494,6 @@ $app->patch(
 	'/facilities/:facilityId/doctors/:doctorId/services/:doctorServiceId',
 	function ($facilityId, $doctorId, $doctorServiceId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-
 		$priceMin = $app->request()->patch('minimum-price');
 		$priceMax = $app->request()->patch('maximum-price');
 
@@ -560,8 +523,6 @@ $app->delete(
 	'/facilities/:facilityId/doctors/:doctorId/services/:doctorServiceId',
 	function ($facilityId, $doctorId, $doctorServiceId) use ($app, $dp)
 	{
-		$dp->setToken($app->session->get('token'));
-
 		$result = $dp->deleteDoctorService($facilityId, $doctorId, $doctorServiceId);
 
 		$app->check($result);

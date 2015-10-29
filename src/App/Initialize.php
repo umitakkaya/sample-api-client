@@ -98,8 +98,12 @@ class Initialize
 	private function initApp()
 	{
 		$this->app = new SlimApp([
-			'view'           => new Blade(),
-			'templates.path' => '../templates',
+			'view'                => new Blade(),
+			'templates.path'      => '../templates',
+			'cookies.encrypt'     => true,
+			'cookies.secret_key'  => 'my_very_secret_and_powerful_key',
+			'cookies.cipher'      => MCRYPT_RIJNDAEL_256,
+			'cookies.cipher_mode' => MCRYPT_MODE_CBC
 		]);
 	}
 
