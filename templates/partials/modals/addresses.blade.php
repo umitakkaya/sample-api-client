@@ -13,6 +13,7 @@
                         <th>Name</th>
                         <th>Street</th>
                         <th colspan="3">Extra Fields</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,6 +38,15 @@
                             <td>
                                 Gender:
                                 <span class="label label-info"> {{ $address->getBookingExtraFields()->isGender() ? 'true' : 'false' }}</span>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-sm btn-default btn-remote-modal"
+                                        data-url="/forms/put-slots?facility-id={{ $facilityId }}&doctor-id={{ $doctorId }}&address-id={{ $address->getId() }}"
+                                        data-trigger="datepicker,datetimepicker">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    Put slots
+                                </button>
                             </td>
                         </tr>
                     @endforeach

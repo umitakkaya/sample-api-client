@@ -16,7 +16,7 @@ $app        = $init->getApp();
 $serializer = $init->getSerializer();
 
 $locale = $app->getCookie('locale') ?: null;
-$token  = $app->getCookie('token')  ?: null;
+$token  = $app->getCookie('token') ?: null;
 $dp     = (new DPClient($serializer))->setToken($token);
 
 
@@ -260,7 +260,9 @@ $app->get('/facilities/:facilityId/doctors/:doctorId/addresses', function ($faci
 	$app->check($addresses);
 
 	$app->render('partials.modals.addresses', [
-		'addresses' => $addresses->getItems()
+		'addresses'  => $addresses->getItems(),
+		'facilityId' => $facilityId,
+		'doctorId'   => $doctorId
 	]);
 });
 

@@ -20,7 +20,7 @@
                 {{$doctor->getSurname()}}
             </td>
             <td>
-                <div class="btn-group" role="group">
+                <div class="btn-group btn-group-sm" role="group">
                     <button class="btn btn-default btn-remote-modal" role="button"
                             data-url="/facilities/{{ $facilityId }}/doctors/{{ $doctor->getId() }}/addresses">
                         <span class="glyphicon glyphicon-list"></span>
