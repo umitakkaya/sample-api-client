@@ -70,7 +70,7 @@ class DPClient
 	 * @param Serializer $serializer
 	 * @param string     $locale
 	 */
-	public function __construct($serializer, $locale = "pl")
+	public function __construct(Serializer $serializer, $locale = "pl")
 	{
 		$requestOptions   = [
 			'headers' => ['Content-Type' => 'application/json'],
