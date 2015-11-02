@@ -14,9 +14,9 @@ $init = new Initialize;
 $app        = $init->getApp();
 $serializer = $init->getSerializer();
 
-$locale = $app->getCookie('locale') ?: null;
-$token  = $app->getCookie('token') ?: null;
-$dp     = (new DPClient($serializer))->setToken($token);
+$locale = $app->getCookie('locale');
+$token  = $app->getCookie('token');
+$dp     = (new DPClient($serializer, $locale))->setToken($token);
 
 
 $app->get('/', function () use ($app, $dp)
