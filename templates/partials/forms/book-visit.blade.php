@@ -13,7 +13,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="ddl-doctor-service" class="control-label">Service:</label>
-                            <select name="doctor-service-id" id="ddl-doctor-service" required="required"
+                            <select name="doctor_service_id" id="ddl-doctor-service" required="required"
                                     class="form-control">
                                 <option value="">Select doctor service</option>
                                 @foreach($doctorServices as $doctorService)
@@ -24,7 +24,7 @@
                         @if($extraFields->isNin())
                             <div class="form-group">
                                 <label for="txt-nin" class="control-label">National Identity Number:</label>
-                                <input type="text" class="form-control" id="txt-nin" name="nin" required>
+                                <input type="text" class="form-control" id="txt-nin" name="patient[nin]" required>
                             </div>
                         @endif
                         @if($extraFields->isBirthDate())
@@ -32,48 +32,48 @@
                                 <label for="dt-birthdate" class="control-label">Birthdate:</label>
                                 <input type="text" data-end="{{ (new \DateTime)->format('Y-m-d') }}"
                                        class="form-control datepicker" id="dt-birthdate"
-                                       name="birthdate" required>
+                                       name="patient[birth_date]" required>
                             </div>
                         @endif
                         <div class="form-group">
                             <label for="txt-name" class="control-label">Name:</label>
                             <input type="text" min="0" class="form-control" id="txt-name"
-                                   name="name">
+                                   name="patient[name]">
                         </div>
                         <div class="form-group">
                             <label for="txt-surname" class="control-label">Surname:</label>
                             <input type="text" min="0" class="form-control" id="txt-surname"
-                                   name="surname">
+                                   name="patient[surname]">
                         </div>
                         <div class="form-group">
                             <label for="txt-phone" class="control-label">Phone:</label>
                             <input type="tel" min="0" class="form-control" id="txt-phone"
-                                   name="phone">
+                                   name="patient[phone]">
                         </div>
                         <div class="form-group">
                             <label for="txt-email" class="control-label">E-mail:</label>
                             <input type="email" min="0" class="form-control" id="txt-email"
-                                   name="email">
+                                   name="patient[email]">
                         </div>
                         @if($extraFields->isGender())
                             <div class="form-group">
                                 <label class="radio-inline">
-                                    <input type="radio" name="gender" value="m" required>
+                                    <input type="radio" name="patient[gender]" value="m" required>
                                     Male
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="gender" value="f" required>
+                                    <input type="radio" name="patient[gender]" value="f" required>
                                     Female
                                 </label>
                             </div>
                         @endif
                         <div class="form-group">
                             <label class="radio-inline">
-                                <input type="radio" name="patient-type" value="1" required>
+                                <input type="radio" name="is_returning" value="1" required>
                                 Returning patient
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="patient-type" value="0" required>
+                                <input type="radio" name="is_returning" value="0" required>
                                 New patient
                             </label>
                         </div>

@@ -350,39 +350,20 @@ $app->delete(
 
 $app->post(
 	'/facilities/:facilityId/doctors/:doctorId/addresses/:addressId/slots/:start/book',
-	function ($facilityId, $doctorId, $addressId, $start) use ($app, $dp)
+	function ($facilityId, $doctorId, $addressId, $start) use ($app, $dp, $serializer)
 	{
-		$strBirthDate    = $app->request()->post('birthdate');
-		$nin             = $app->request()->post('nin');
-		$name            = $app->request()->post('name');
-		$surname         = $app->request()->post('surname');
-		$email           = $app->request()->post('email');
-		$phone           = $app->request()->post('phone');
-		$gender          = $app->request()->post('gender');
-		$birthDate       = $strBirthDate ? new \DateTime($strBirthDate) : null;
-		$doctorServiceId = $app->request()->post('doctor-service-id');
-		$patientType     = (bool) $app->request()->post('patient-type');
+		$start = new \DateTime($start);
+		$data  = $app->request()->post();
 
+		//Let's avoid serializer DateTime format validation with a simple trick
+		$data['patient']['birth_date'] = (new \DateTime($data['patient']['birth_date']))->format(DATETIME::ATOM);
+
+		/** @var BookVisitRequest $bookVisitRequest */
+		$bookVisitRequest = $serializer->deserialize(json_encode($data), BookVisitRequest::class, 'json');
 
 		/**
 		 * You may want to put some validation logic here.
 		 */
-
-		$start = new \DateTime($start);
-
-		$patient = (new Patient)
-			->setNin($nin)
-			->setName($name)
-			->setSurname($surname)
-			->setEmail($email)
-			->setPhone($phone)
-			->setGender($gender)
-			->setBirthDate($birthDate);
-
-		$bookVisitRequest = (new BookVisitRequest)
-			->setDoctorServiceId($doctorServiceId)
-			->setIsReturning($patientType)
-			->setPatient($patient);
 
 		$bookVisitResponse = $dp->bookSlot($facilityId, $doctorId, $addressId, $start, $bookVisitRequest);
 
