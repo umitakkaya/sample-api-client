@@ -368,7 +368,7 @@
                 }
             }).done(function (data) {
                 $target.append(data);
-                triggerPlugin($target, 'datetimepicker');
+                triggerPlugin($target.children().last(), 'datetimepicker');
             });
 
 
