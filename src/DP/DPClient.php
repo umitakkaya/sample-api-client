@@ -8,7 +8,6 @@
 
 namespace DP;
 
-use DP\Model\AbstractErrorResponse;
 use DP\Model\Address;
 use DP\Model\AddressesResponse;
 use DP\Model\BookingsResponse;
@@ -27,7 +26,6 @@ use DP\Model\FacilitiesResponse;
 use DP\Model\PutSlotsRequest;
 use DP\Model\PutSlotsResponse;
 use DP\Model\ServicesResponse;
-use DP\Model\Slot;
 use DP\Model\SlotsResponse;
 use Guzzle\Http\Client;
 use Guzzle\Http\Exception\BadResponseException;
@@ -250,7 +248,7 @@ class DPClient
 		//If not then we should simply return the expected class instance with data.
 		if ($error === null)
 		{
-			$object = $this->serializer->deserialize($response->getBody(true), $className, 'json');
+			$object = $this->serializer->deserialize($response->getBody(true), $className, 'json', $context);
 		}
 		else
 		{

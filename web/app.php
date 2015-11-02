@@ -4,7 +4,6 @@ use App\Initialize;
 use DP\DPClient;
 use DP\Model\BookVisitRequest;
 use DP\Model\DoctorService;
-use DP\Model\Patient;
 use DP\Model\PutSlotsRequest;
 
 
