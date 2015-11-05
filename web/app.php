@@ -353,9 +353,13 @@ $app->post(
 	{
 		$start = new \DateTime($start);
 		$data  = $app->request()->post();
+		
+		if(isset($data['patient']['birth_date']))
+		{
+			//Let's avoid serializer DateTime format validation with a simple trick
+			$data['patient']['birth_date'] = (new \DateTime($data['patient']['birth_date']))->format(DATETIME::ATOM);
+		}
 
-		//Let's avoid serializer DateTime format validation with a simple trick
-		$data['patient']['birth_date'] = (new \DateTime($data['patient']['birth_date']))->format(DATETIME::ATOM);
 
 		/** @var BookVisitRequest $bookVisitRequest */
 		$bookVisitRequest = $serializer->deserialize(json_encode($data), BookVisitRequest::class, 'json');

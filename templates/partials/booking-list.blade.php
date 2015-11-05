@@ -41,7 +41,7 @@
                 <div>(ID: {{ $booking->getService()->getId() }})</div>
             </td>
             <td>
-                @unless($booking->getCanceledBy())
+                @unless($booking->getCanceledBy() || $booking->getStartAt() < (new DateTime))
                     <button type="button"
                             class="btn btn-danger btn-remote-call btn-sm"
                             data-method="DELETE"
