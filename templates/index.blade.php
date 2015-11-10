@@ -24,6 +24,10 @@
 
     <div class="alert alert-info @if (empty($token))hidden@endif" role="alert">
         Here is your access token: <span id="token">{{ $token }}</span>
+        <a href="/logout" class="pull-right">
+            <span class="glyphicon glyphicon-off"></span>
+            Logout
+        </a>
     </div>
 
     @if (empty($token))

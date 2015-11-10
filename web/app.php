@@ -26,25 +26,42 @@ $app->get('/', function () use ($app, $dp)
 	]);
 });
 
-$app->post('/authorization', function () use ($app, $dp)
+$app->post('/authorization', function () use ($app, $dp, $serializer)
 {
 	$clientId     = $app->request()->post('client-id');
 	$clientSecret = $app->request()->post('client-secret');
 	$locale       = $app->request()->post('locale');
 
-	$dp->setClientId($clientId)->setClientSecret($clientSecret);
+	$dp = (new DPClient($serializer, $locale))
+		->setClientId($clientId)
+		->setClientSecret($clientSecret);
+
 	$token = $dp->authorize();
 
 	$app->setCookie('locale', $locale);
 	$app->setCookie('token', $token);
-	$app->setEncryptedCookie('clientId', $clientId);
-	$app->setEncryptedCookie('clientSecret', $clientSecret);
+	$app->setCookie('clientId', $clientId);
+	$app->setCookie('clientSecret', $clientSecret);
 
 	$app->response()->header('Content-Type', 'application/json');
 	$app->response()->body(json_encode([
 		'token'  => $token,
 		'status' => true
 	]));
+});
+
+$app->get('/logout', function () use ($app, $dp)
+{
+	$app->deleteCookie('locale');
+	$app->deleteCookie('token');
+	$app->deleteCookie('clientId');
+	$app->deleteCookie('clientSecret');
+
+	$app->session->clear();
+
+	$dp = null;
+
+	$app->redirect('/');
 });
 
 
@@ -353,8 +370,8 @@ $app->post(
 	{
 		$start = new \DateTime($start);
 		$data  = $app->request()->post();
-		
-		if(isset($data['patient']['birth_date']))
+
+		if (isset($data['patient']['birth_date']))
 		{
 			//Let's avoid serializer DateTime format validation with a simple trick
 			$data['patient']['birth_date'] = (new \DateTime($data['patient']['birth_date']))->format(DATETIME::ATOM);
