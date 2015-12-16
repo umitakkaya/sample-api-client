@@ -70,19 +70,18 @@ class DPClient
 	 */
 	public function __construct(Serializer $serializer, $locale = 'pl')
 	{
-		if($locale === null)
+		if ($locale === null)
 		{
 			$locale = 'pl';
 		}
 
-		$requestOptions   = [
+		$requestOptions = [
 			'headers' => ['Content-Type' => 'application/json'],
 		];
 
 		$this->serializer = $serializer;
 		$this->client     = new Client(self::$PREFIXES[$locale], ['request.options' => $requestOptions]);
 	}
-
 
 
 	/**
@@ -438,7 +437,8 @@ class DPClient
 	 */
 	public function bookSlot($facilityId, $doctorId, $addressId, $start, $bookVisitRequest)
 	{
-		$requestBody = $this->serializer->serialize($bookVisitRequest, 'json', SerializationContext::create()->setGroups(['Default', 'post_book']));
+		$requestBody = $this->serializer->serialize($bookVisitRequest, 'json', SerializationContext::create()
+			->setGroups(['Default', 'post_book']));
 
 		$request =
 			$this->client->post([

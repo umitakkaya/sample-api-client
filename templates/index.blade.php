@@ -384,9 +384,14 @@
             var uri = $tab.attr('href');
 
             if ($tab.data('loaded') !== true) {
+
+                //to fix manually triggered ajax call
+                $(document).trigger('ajaxStart');
+
                 $.get(uri).done(function (data) {
                     $content.html(data);
                     $tab.data('loaded', true);
+                    $(document).trigger('ajaxComplete');
                 });
             }
         });
