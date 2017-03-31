@@ -70,7 +70,9 @@
                         <select class="form-control" name="locale" id="ddl-locale" required>
                             <option value="">Select locale</option>
                             <option value="pl">ZnanyLekarz (PL)</option>
-                            <option value="tr">Eniyihekim (TR)</option>
+                            <option value="tr">DoktorTakvimi (TR)</option>
+                            <option value="cz">Czech Republic (CZ)</option>
+                            <option value="it">Italy (IT)</option>
                         </select>
                     </div>
                 </div>
