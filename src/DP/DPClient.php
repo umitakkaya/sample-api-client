@@ -40,7 +40,9 @@ class DPClient
 {
 	public static $PREFIXES = [
 		'pl' => 'https://www.znanylekarz.pl/api/v2/integration/',
-		'tr' => 'https://www.eniyihekim.com/api/v2/integration/'
+		'cz' => 'https://www.znamylekar.cz/api/v2/integration/',
+		'it' => 'https://www.miodottore.it/api/v2/integration/',
+		'tr' => 'https://www.eniyihekim.com/api/v2/integration/',
 	];
 
 
